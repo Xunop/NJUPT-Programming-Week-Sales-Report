@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.reportform.mapper.ProMapper">
+    <resultMap id="orderMap" type="com.reportform.entity.Order">
+        <result property="zone" column="zone"/>
+        <result property="orderId" column="order_id"/>
+        <result property="time" column="order_date"/>
+        <result property="platName" column="plat_name"/>
+        <result property="vendName" column="vend_name"/>
+        <result property="proName" column="pro_name"/>
+        <result property="price" column="pro_price"/>
+    </resultMap>
+    <resultMap id="vendSummaryMap" type="com.reportform.pojo.VendSummary">
+        <result property="vendorName" column="vend_name"/>
+        <result property="sales" column="sales"/>
+    </resultMap>
+
+    <insert id="add" parameterType="com.reportform.entity.Product">
+        insert into productorder (pro_id, order_date, zone, plat_id)
+        values (#{proid}, #{time}, #{zone}, #{platid})
+    </insert>
+    <select id="findIdByProName" resultType="integer">
+        select pro_id
+        from product
+        where pro_name = #{name}
+    </select>
+
+    <select id="findIdByPlatName" resultType="integer">
+        select plat_id
+        from platform
+        where plat_name = #{name}
+    </select>
+
+    <select id="searchByProId" resultMap="orderMap">
+        select order_id, order_date, zone, plat_name, vend_name, pro_name, pro_price
+        from productorder
+                 inner join platform p on productorder.plat_id = p.plat_id
+                 inner join product p2 on productorder.pro_id = p2.pro_id
+        where productorder.pro_id = #{proid}
+    </select>
+
+
+    <select id="searchByOrderId" resultMap="orderMap">
+        select order_id, order_date, zone, plat_name, vend_name, pro_name, pro_price
+        from productorder
+                 inner join platform p on productorder.plat_id = p.plat_id
+                 inner join product p2 on productorder.pro_id = p2.pro_id
+        where productorder.order_id = #{orderid}
+    </select>
+
+
+    <update id="update">
+        update productorder
+        set zone   = #{zone},
+            pro_id = #{proid}
+        where order_id = #{orderid}
+    </update>
+
+    <select id="findOrderId" resultType="integer">
+        select order_id
+        from productorder
+        where pro_id = #{proid}
+          and plat_id = #{platid}
+          and order_date like #{time}
+          and zone = #{zone}
+    </select>
+
+    <delete id="delete">
+        delete
+        from productorder
+        where order_id = #{orderid}
+    </delete>
+
+    <select id="queryAll" resultMap="orderMap">
+        select order_id, order_date, zone, plat_name, vend_name, pro_name, pro_price
+        from productorder
+                 inner join platform p on productorder.plat_id = p.plat_id
+                 inner join product p2 on productorder.pro_id = p2.pro_id
+        order by order_id
+    </select>
+
+    <insert id="insertData">
+        insert into product(vend_name, pro_name, pro_price)
+        values ('小米', #{name}, #{price})
+    </insert>
+
+    <select id="findOrderByTimeAndName" resultMap="vendSummaryMap">
+        SELECT vend_name,
+               count(*) as 'sales'
+        FROM productorder
+                 INNER JOIN product p ON productorder.pro_id = p.pro_id
+        WHERE order_date LIKE #{time}
+        Group By vend_name
+    </select>
+
+    <select id="findSalesByVenName" resultMap="vendSummaryMap">
+        select vend_name,
+               count(*) as 'sales'
+        from productorder
+                 inner join product p on productorder.pro_id = p.pro_id
+        where order_date like #{time}
+          and vend_name = #{vendName}
+    </select>
+</mapper>

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>修改订单</title>
+    <link rel="icon" href="../static/favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <link rel="stylesheet" type="text/css" href="../static/css/materialdesignicons.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../static/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../static/css/animate.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../static/js/jquery-confirm/jquery-confirm.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../static/css/style.min.css"/>
+    <style>
+        body {
+            background-color: white;
+        }
+    </style>
+</head>
+<body>
+<div class="lyear-layout-web">
+    <div class="lyear-layout-container">
+        <!--左侧导航-->
+        <aside class="lyear-layout-sidebar">
+
+            <!-- logo -->
+            <div id="logo" class="sidebar-header">
+                <a href="/statisticso"><img src="../static/images/logo_02_form.png" title="LightYear" alt="LightYear"/></a>
+            </div>
+            <div class="lyear-layout-sidebar-info lyear-scroll">
+
+                <nav class="sidebar-main">
+                    <ul class="nav-drawer">
+                        <li class="nav-item active"><a href="/search"><i class="mdi mdi-home"></i> <span>后台首页</span></a>
+                        </li>
+                        <li class="nav-item active"><a href="/addo"><i class="mdi mdi-format-align-justify"></i> <span>订单管理(增加订单)</span></a>
+                        </li>
+                        <li class="nav-item active"><a href="/statisticso"><i class="mdi mdi-circle-slice-5"></i>
+                            <span>销售报表</span></a></li>
+                    </ul>
+                </nav>
+
+                <div class="sidebar-footer">
+                    <p class="copyright">Copyright &copy; 2019. <a target="_blank"
+                                                                   href="http://lyear.itshubao.com">IT书包</a> All rights
+                        reserved.</p>
+                </div>
+            </div>
+
+        </aside>
+    </div>
+    <!--End 左侧导航-->
+    <header class="lyear-layout-header">
+        <nav class="navbar">
+
+            <div class="navbar-left">
+                <div class="lyear-aside-toggler">
+                    <span class="lyear-toggler-bar"></span>
+                    <span class="lyear-toggler-bar"></span>
+                    <span class="lyear-toggler-bar"></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+</div>
+<!--页面主要内容-->
+<main class="lyear-layout-content">
+
+    <div class="row">
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="container-fluid p-t-15">
+
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="card">
+                                <div class="card-body">
+
+                                    <form th:action="@{/statistics}" method="post" class="row">
+                                        <div class="form-group col-md-12">
+                                            <label for="time">年份</label>
+                                            <input type="text" class="form-control" id="time" name="time" th:value="${time}"
+                                                   placeholder="请输入年份"/>
+                                        </div>
+                                        <div class="form-group col-md-12">
+                                            <button type="submit" class="btn btn-primary ajax-post">确 定
+                                            </button>
+                                        </div>
+                                    </form>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="card-header">
+                    <div class="card-title" th:value>销售量条形图</div>
+                </div>
+                <div class="card-body">
+                    <canvas class="js-chartjs-bars"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="container-fluid p-t-15">
+
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="card">
+                                <div class="card-body">
+
+                                    <form th:action="@{/statisticseve}" method="post" class="row">
+                                        <div class="form-group col-md-12">
+                                            <label for="venName">手机品牌</label>
+                                            <input type="text" class="form-control" id="venName" name="vend_name" th:value="${vendName}"
+                                                   placeholder="请输入手机品牌"/>
+                                        </div>
+                                        <div class="form-group col-md-12">
+                                            <button type="submit" class="btn btn-primary ajax-post">确 定
+                                            </button>
+                                        </div>
+                                    </form>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="card-header">
+                    <div class="card-title">销售额折线图</div>
+                </div>
+                <div class="card-body">
+                    <canvas class="js-chartjs-lines"></canvas>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</main>
+
+
+<script type="text/javascript" src="../static/js/jquery.min.js"></script>
+<script type="text/javascript" src="../static/js/popper.min.js"></script>
+<script type="text/javascript" src="../static/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../static/js/perfect-scrollbar.min.js"></script>
+<script type="text/javascript" src="../static/js/jquery.cookie.min.js"></script>
+<script type="text/javascript" src="../static/js/main.min.js"></script>
+<script type="text/javascript" src="../static/js/Chart.min.js"></script>
+<script language="JavaScript">
+    function deleteOrder(orderId) {
+        alert("订单" + orderId + "已删除");
+    }
+
+    function updateOrder(orderId) {
+        alert("订单" + orderId + "更新成功");
+    }
+
+    function replace() {
+        window.location.href = "http://localhost:8081/addo";
+    }
+</script>
+<script th:inline="javascript">
+    $(document).ready(function (e) {
+        var $dashChartBarsCnt = jQuery('.js-chartjs-bars')[0].getContext('2d'),
+            $dashChartLinesCnt = jQuery('.js-chartjs-lines')[0].getContext('2d');
+        var data1 = [[${sales1}]];
+        var data2 = [[${sales2}]];
+        var data3 = [[${sales3}]];
+        var data4 = [[${sales4}]];
+        var $dashChartBarsData = {
+            labels: ['小米', '华为', '苹果', 'OPPO'],
+            datasets: [
+                {
+                    label: '销售量',
+                    borderWidth: 1,
+                    borderColor: 'rgba(0, 0, 0, 0)',
+                    backgroundColor: 'rgba(51, 202, 185, 0.5)',
+                    hoverBackgroundColor: "rgba(51, 202, 185, 0.7)",
+                    hoverBorderColor: "rgba(0, 0, 0, 0)",
+                    data: [data1, data2, data3, data4]
+                }
+            ]
+        };
+        var data5 = [[${sales2017}]];
+        var data6 = [[${sales2018}]];
+        var data7 = [[${sales2019}]];
+        var data8 = [[${sales2020}]];
+        var data9 = [[${sales2021}]];
+        var $dashChartLinesData = {
+            labels: ['2017','2018','2019', '2020', '2021'],
+            datasets: [
+                {
+                    label: '销售量',
+                    data: [data5, data6, data7, data8, data9],
+                    borderColor: '#358ed7',
+                    backgroundColor: 'rgba(53, 142, 215, 0.175)',
+                    borderWidth: 1,
+                    fill: false,
+                    lineTension: 0.5
+                }
+            ]
+        };
+
+        new Chart($dashChartBarsCnt, {
+            type: 'bar',
+            data: $dashChartBarsData
+        });
+
+        var myLineChart = new Chart($dashChartLinesCnt, {
+            type: 'line',
+            data: $dashChartLinesData,
+        });
+    });
+</script>
+</body>
+</html>

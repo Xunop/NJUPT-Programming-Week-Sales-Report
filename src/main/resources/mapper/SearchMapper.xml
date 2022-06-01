@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.reportform.mapper.SearchMapper">
+    <resultMap id="orderMap" type="com.reportform.entity.Order">
+        <result property="zone" column="zone"/>
+        <result property="orderId" column="order_id"/>
+        <result property="time" column="order_date"/>
+        <result property="platName" column="plat_name"/>
+        <result property="vendName" column="vend_name"/>
+        <result property="proName" column="pro_name"/>
+        <result property="price" column="pro_price"/>
+    </resultMap>
+    <select id="searchByAll" resultMap="orderMap">
+    select order_id, order_date, zone, plat_name, vend_name, pro_name, pro_price
+    from productorder
+             inner join platform p on productorder.plat_id = p.plat_id
+             inner join product p2 on productorder.pro_id = p2.pro_id
+    where 1=1
+    <if test="orderId != null">
+        AND order_id = #{orderId}
+    </if>
+    <if test="proId != null">
+        AND productorder.pro_id = #{proId}
+    </if>
+    <if test="platId != null">
+        AND productorder.plat_id = #{platId}
+    </if>
+    <if test="zone != null">
+        AND zone = #{zone}
+    </if>
+    <if test="time != null">
+        AND productorder.order_date like #{time}
+
+    </if>
+    order by order_id
+    limit #{itemsPerPage} offset #{offset}
+    </select>
+    <select id="searchAll" resultMap="orderMap">
+        select order_id, order_date, zone, plat_name, vend_name, pro_name, pro_price
+        from productorder
+        inner join platform p on productorder.plat_id = p.plat_id
+        inner join product p2 on productorder.pro_id = p2.pro_id
+        where 1=1
+        <if test="orderId != null">
+            AND order_id = #{orderId}
+        </if>
+        <if test="proId != null">
+            AND productorder.pro_id = #{proId}
+        </if>
+        <if test="platId != null">
+            AND productorder.plat_id = #{platId}
+        </if>
+        <if test="zone != null">
+            AND zone = #{zone}
+        </if>
+        <if test="time != null">
+            AND productorder.order_date like #{time}
+
+        </if>
+        order by order_id
+    </select>
+</mapper>
