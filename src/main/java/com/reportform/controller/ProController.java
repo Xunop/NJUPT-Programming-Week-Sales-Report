@@ -1,12 +1,15 @@
 package com.reportform.controller;
 
 import com.reportform.entity.Order;
+import com.reportform.pojo.SecondSmoothingEntity;
 import com.reportform.pojo.VendSummary;
 import com.reportform.service.ProService;
+import com.reportform.util.DataForecast;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -24,7 +27,9 @@ public class ProController {
     }
 
     @PostMapping ("/add")
-    public String add(@RequestParam("pro_name" ) String proName,@RequestParam("plat_name") String platName,@RequestParam("zone") String zone) {
+    public String add(@RequestParam("pro_name" ) String proName,
+                      @RequestParam("plat_name") String platName,
+                      @RequestParam("zone") String zone) {
         proService.add(proName, platName, zone);
         return "addorder";
     }
@@ -36,7 +41,9 @@ public class ProController {
 
 
     @PostMapping("/update")
-    public String update(@RequestParam("order_id") Integer orderId, @RequestParam("zone") String zone, @RequestParam("pro_name") String proName) {
+    public String update(@RequestParam("order_id") Integer orderId,
+                         @RequestParam("zone") String zone,
+                         @RequestParam("pro_name") String proName) {
         proService.update(orderId, zone, proName);
         return "update";
     }
@@ -51,11 +58,6 @@ public class ProController {
     public String delete(@RequestParam("order_id") Integer orderId) {
         proService.delete(orderId);
         return "redirect:/search";
-    }
-
-    @GetMapping("/list")
-    public List<Order> queryAll() {
-        return proService.queryAll();
     }
 
     @RequestMapping("/statistics")
@@ -94,6 +96,29 @@ public class ProController {
             }
         }
         model.addAttribute("vendName", vendName);
+        return "form";
+    }
+
+    @RequestMapping("/forecast")
+    public String forecastData(@RequestParam("vend_name") String vendName, Model model) {
+        List<String> timeList = Arrays.asList("2017", "2018", "2019", "2020", "2021");
+        List<VendSummary> statistics;
+        List<Integer> realDataList = new ArrayList<>();
+        int sum = 0;
+        double avg = 0;
+        for (String time : timeList) {
+            String time1= time + "%";
+            statistics = proService.querySales(time1, vendName);
+            for (VendSummary statistic : statistics) {
+                int sales = statistic.getSales();
+                sum += sales;
+                realDataList.add(sales);
+            }
+        }
+        avg = sum / 10.0;
+        Integer forecast = proService.forecast(vendName, realDataList, sum, avg);
+        model.addAttribute("forecast", forecast);
+        model.addAttribute("vend_name", vendName);
         return "form";
     }
 }

@@ -2,7 +2,7 @@
 <html lang="zh">
 <head>
     <meta charset="UTF-8">
-    <title>修改订单</title>
+    <title>销售报表</title>
     <link rel="icon" href="../static/favicon.ico">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-touch-fullscreen" content="yes">
@@ -81,7 +81,8 @@
                                     <form th:action="@{/statistics}" method="post" class="row">
                                         <div class="form-group col-md-12">
                                             <label for="time">年份</label>
-                                            <input type="text" class="form-control" id="time" name="time" th:value="${time}"
+                                            <input type="text" class="form-control" id="time" name="time"
+                                                   th:value="${time}"
                                                    placeholder="请输入年份"/>
                                         </div>
                                         <div class="form-group col-md-12">
@@ -118,7 +119,8 @@
                                     <form th:action="@{/statisticseve}" method="post" class="row">
                                         <div class="form-group col-md-12">
                                             <label for="venName">手机品牌</label>
-                                            <input type="text" class="form-control" id="venName" name="vend_name" th:value="${vendName}"
+                                            <input type="text" class="form-control" id="venName" name="vend_name"
+                                                   th:value="${vendName}"
                                                    placeholder="请输入手机品牌"/>
                                         </div>
                                         <div class="form-group col-md-12">
@@ -143,7 +145,38 @@
                 </div>
             </div>
         </div>
-
+        <div class="col-md-6">
+            <div class="card">
+                <div class="container-fluid p-t-15">
+                    <form th:action="@{/forecast}" method="post" class="row">
+                        <div class="form-group col-md-12">
+                            <label>预测数据</label>
+                            <input type="text" class="form-control" name="vend_name"
+                                   th:value="${vend_name}"
+                                   placeholder="请输入需要预测的手机品牌"/>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>下一年该手机品牌的预测值</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td th:text="${forecast}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <button type="submit" class="btn btn-primary ajax-post">确 定
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 
 </main>
@@ -197,7 +230,7 @@
         var data8 = [[${sales2020}]];
         var data9 = [[${sales2021}]];
         var $dashChartLinesData = {
-            labels: ['2017','2018','2019', '2020', '2021'],
+            labels: ['2017', '2018', '2019', '2020', '2021'],
             datasets: [
                 {
                     label: '销售量',
